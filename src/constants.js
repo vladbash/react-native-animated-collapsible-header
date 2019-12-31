@@ -1,0 +1,7 @@
+const EXPANDED_HEIGHT = 310;
+const COLLAPSED_HEIGHT = 120;
+
+export {
+    EXPANDED_HEIGHT,
+    COLLAPSED_HEIGHT
+};
