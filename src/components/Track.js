@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import {
     View,
     Text,
     StyleSheet,
-    Image
+    Image,
+    TouchableOpacity
 } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
@@ -40,21 +41,44 @@ const styles = StyleSheet.create({
     actionsContainer: {
         justifyContent: 'center',
         marginRight: 10
+    },
+    positionContainer: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: 32,
+        marginLeft: 5,
+        marginRight: 10
+    },
+    position: {
+        fontSize: 18
     }
 });
 
-const Track = ({ track, cover, artist, year, selected = false }) => (<View style={styles.container}>
-    <View style={styles.coverContainer}>
-        <Image source={{ uri: cover }} style={styles.cover} />
-    </View>
-    <View style={styles.metaContainer}>
-        <Text style={styles.track}>{track}</Text>
-        <Text style={styles.artist}>{artist}</Text>
-        <Text>{year}</Text>
-    </View>
-    <View style={styles.actionsContainer}>
-        {selected && <MaterialIcons name="play-circle-outline" size={22}/>}
-    </View>
-</View>);
+const Track = ({ position = 0, track, cover, artist, year, selected = false, onPress }) => {
+    const onTrackSelect = useCallback(() => {
+        onPress({
+            track,
+            cover,
+            artist,
+            year
+        });
+    }, [track, cover, artist, year, onPress]);
+    return (<TouchableOpacity style={styles.container} activeOpacity={0.65} onPress={onTrackSelect}>
+        <View style={styles.positionContainer}>
+            {selected ? <MaterialIcons name="equalizer" color="#49C18F" size={22} /> : <Text style={styles.position}>{('0' + position).slice(-2)}.</Text>}
+        </View>
+        <View style={styles.coverContainer}>
+            <Image source={{ uri: cover }} style={styles.cover} />
+        </View>
+        <View style={styles.metaContainer}>
+            <Text style={styles.track}>{track}</Text>
+            <Text style={styles.artist}>{artist}</Text>
+            <Text>{year}</Text>
+        </View>
+        <View style={styles.actionsContainer}>
+            <MaterialIcons name="more-horiz" size={22} />
+        </View>
+    </TouchableOpacity>);
+};
 
 export default Track;

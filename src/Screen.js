@@ -10,7 +10,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { PanGestureHandler, State } from 'react-native-gesture-handler';
 
 import { Header, List } from './components';
-import { initTracksList } from './store';
+import { initTracksList, setSelected } from './store';
 import { COLLAPSED_HEIGHT, EXPANDED_HEIGHT } from './constants';
 
 const styles = StyleSheet.create({
@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     }
 });
 
-const Screen = ({ tracks, selected, initTracksList }) => {
+const Screen = ({ tracks, selected, initTracksList, setSelected }) => {
     useEffect(() => {
         initTracksList();
     }, []);
@@ -62,14 +62,17 @@ const Screen = ({ tracks, selected, initTracksList }) => {
         <Animated.View style={[styles.list, styles.listShadow]}>
             {/* <PanGestureHandler onGestureEvent={onGestureEvent} onHandlerStateChange={onHandlerStateChange}> */}
             <View>
-                <List tracks={tracks} selected={selected}
+                <List
+                    tracks={tracks}
+                    selected={selected}
+                    onSelect={setSelected}
                     onScroll={Animated.event([{
                         nativeEvent: {
                             contentOffset: { y: scrollY }
                         }
                     }])}
                     scrollEventThrottle={16}
-                    />
+                />
             </View>
             {/* </PanGestureHandler> */}
         </Animated.View>
@@ -79,4 +82,7 @@ const Screen = ({ tracks, selected, initTracksList }) => {
 export default connect(state => ({
     tracks: state.tracks,
     selected: state.selected
-}), { initTracksList })(Screen);
+}), {
+    initTracksList,
+    setSelected
+})(Screen);

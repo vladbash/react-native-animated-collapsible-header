@@ -13,14 +13,14 @@ const styles = StyleSheet.create({
     }
 });
 
-const List = ({ tracks, selected, ...props }) => (<View style={styles.container}>
+const List = ({ tracks, selected, onSelect, ...props }) => (<View style={styles.container}>
     <FlatList
         {...props}
         data={tracks}
         showsVerticalScrollIndicator={false}
         keyExtractor={item => item.cover}
-        renderItem={({ item }) => (<Track selected={selected.cover === item.cover} {...item}/>)}
-        />
+        renderItem={({ item, index }) => (<Track selected={selected.cover === item.cover} position={index + 1} {...item} onPress={onSelect} />)}
+    />
 </View>);
 
 export default List;
